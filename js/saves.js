@@ -153,15 +153,18 @@ function wipe() {
 };
 };
 
-function notate(ex,acc=2){
-    if(E(ex).lt("e9")){
-        return Math.round(E(ex).toNumber()*10**acc)/10**acc;
-    } else if(E(ex).lt("ee9")) {
-        return (10**(E(ex).log10().toNumber()%1)).toFixed(2) + "e" + notate(Math.floor(E(ex).log10().toNumber()),0);
-    } else {
-        return "e" + notate(E(ex).log10(),0);
+function notate(ex, acc=2) {
+    ex = E(ex)
+    let e = ex.log10().floor()
+    if (e.lt(6)) {
+        if (e.lt(3)) {
+            return ex.toFixed(acc)
+        }
+        return ex.floor().toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
-};
+    let m = ex.div(E(10).pow(e))
+    return (e.log10().gte(6)?'':m.toFixed(acc))+'e'+notate(e,0)
+}
 
 function save(){
     localStorage.setItem("theColorTreeSave",btoa(JSON.stringify(player)));
@@ -185,6 +188,7 @@ function load(x){
 function loadGame(){
     wipe()
     load(localStorage.getItem("theColorTreeSave"));
+    setInterval(save,1000)
 }
 
 /*
