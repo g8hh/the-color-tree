@@ -1,0 +1,134 @@
+* {
+	transition-duration: 0.5s;
+	text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    table-align: center;
+}
+
+body {
+    color: white;
+    text-shadow: 0px 0px 7px white;
+    background-color: black;
+    overflow: hidden;
+}
+
+table, tr {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    border: solid 3px black;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+h1, h2 {
+    display: inline;
+    font-size: 25px;
+}
+
+.t_red {
+    color: #ff0000;
+    text-shadow: 0px 0px 7px #ff0000;
+}
+
+.t_green {
+    color: #00ff00;
+    text-shadow: 0px 0px 7px #00ff00;
+}
+
+.t_blue {
+    color: #0000ff;
+    text-shadow: 0px 0px 7px #0000ff;
+}
+
+.t_yellow {
+    color: #ffff00;
+    text-shadow: 0px 0px 7px #ffff00;
+}
+
+.t_teal {
+    color: #00ffff;
+    text-shadow: 0px 0px 7px #00ffff;
+}
+
+.t_magenta {
+    color: #ff00ff;
+    text-shadow: 0px 0px 7px #ff00ff;
+}
+
+.color_tab {
+    width: 90px;
+    height: 90px;
+    font-size: 60px;
+}
+
+.b_red {
+    background-color: #ff0000;
+}
+
+.b_green {
+    background-color: #00ff00;
+}
+
+.b_blue {
+    background-color: #0000ff;
+}
+
+.b_yellow {
+    background-color: #ffff00;
+}
+
+.b_teal {
+    background-color: #00ffff;
+}
+
+.b_magenta {
+    background-color: #ff00ff;
+}
+
+.col {
+    min-width: 49.5%;
+    max-width: 49.5%;
+    width: 49.5%;
+    height: 100%;
+    min-height: 100%;
+    column-span: 1;
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.upg {
+    height: 120px;
+    width: 120px;
+    border-radius: 25%;
+    border-color: black;
+    font-size: 10px;
+}
+
+.left {
+    position: absolute;
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+.reset {
+    width: 150px;
+    height: 100px;
+}
+
+#undo {
+    position: absolute;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    border: solid 3px black;
+    background-color: #ffffff;
+    border-radius: 8px;
+}

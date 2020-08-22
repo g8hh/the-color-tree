@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/ExpantaNum.js"></script>
+    <script src="js/saves.js"></script>
+    <script src="js/calc.js"></script>
+    <script src="js/main.js"></script>
+
+    <title>The Color Tree</title>
+</head>
+<body onload="loadGame(); setInterval(save, 1000)" data-gr-c-s-loaded='true'>
+    <div class="col left">
+        <span style="cursor: pointer" onclick="changeTab('info')">|info|</span>
+        <br><br>
+        You have <h2 id="points">0</h2> points
+        <br><br><br><br>
+        <button class="color_tab" onclick="changeTab('white')">W</button>
+        <br><br>
+        <div>
+            <button class="color_tab b_red" onclick="changeTab('red')">R</button>
+            <button class="color_tab b_green" onclick="changeTab('green')">G</button>
+            <button class="color_tab b_blue" onclick="changeTab('blue')">B</button>
+        </div>
+        <br>
+        <div>
+            <button class="color_tab b_yellow" onclick="changeTab('yellow')">Y</button>
+            <button class="color_tab b_magenta" onclick="changeTab('magenta')">M</button>
+            <button class="color_tab b_teal" onclick="changeTab('teal')">T</button>
+        </div>
+    </div><div class="col right">
+        <div id="info" style="display: none;">
+            <br><br><br><br><br><br>
+            <h1>|The Color Tree|</h1>
+            <br><br>
+            Made by MrRedShark77
+            <br><br>
+            |Version| - pre-alpha build 1 (WIP)
+            <br><br>
+            Fan game "The Prestige Tree" by Jacorb
+        </div><div id="white" style="display: none;">
+            You have <h2 id="whites">0</h2> white points
+            <br><br><br><br>
+            <button class="reset" onclick="reset('w')">Reset for <span id="w_reset">1</span> white points</button>
+            <br>
+            (Reach over 10 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="wupg0" onclick="buyUpg('w',0)"></button></td>
+                        <td><button class="upg" id="wupg1" onclick="buyUpg('w',1)"></button></td>
+                        <td><button class="upg" id="wupg2" onclick="buyUpg('w',2)"></button></td>
+                        <td><button class="upg" id="wupg3" onclick="buyUpg('w',3)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><div id="red" style="display: none;">
+            You have <h2 class="t_red" id="reds">0</h2> red points, translated to a <span id="eff0"></span>x multiplier to point gain
+            <br><br><br><br>
+            <button class="reset b_red" onclick="reset('r')">Reset for <span id="r_reset">0</span> red points</button>
+            <br>
+            (Reach over 200 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="rupg0" onclick="buyUpg('r',0)"></button></td>
+                        <td><button class="upg" id="rupg1" onclick="buyUpg('r',1)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><div id="green" style="display: none;">
+            You have <h2 class="t_green" id="greens">0</h2> green points, which are generating <span id="eff1"></span> Green Power/sec
+            <br><br>
+            You have <span id="power1"></span> Green Power, which multiples Point gain by <span id="eff2"></span>
+            <br><br><br><br>
+            <button class="reset b_green" onclick="reset('g')">Reset for <span id="g_reset">0</span> green points</button>
+            <br>
+            (Reach over 200 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="gupg0" onclick="buyUpg('g',0)"></button></td>
+                        <td><button class="upg" id="gupg1" onclick="buyUpg('g',1)"></button></td>
+                        <td><button class="upg" id="gupg2" onclick="buyUpg('g',2)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><div id="blue" style="display: none;">
+            You have <h2 class="t_blue" id="blues">0</h2> blue points, which multiples white point gain by <span id="eff3"></span>
+            <br><br><br><br>
+            <button class="reset b_blue" onclick="reset('b')">Reset for <span id="b_reset">0</span> blue points</button>
+            <br>
+            (Reach over 200 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="bupg0" onclick="buyUpg('b',0)"></button></td>
+                        <td><button class="upg" id="bupg1" onclick="buyUpg('b',1)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><div id="yellow" style="display: none;">
+            (Reach over ??? points to reset only red & green)
+        </div><div id="magenta" style="display: none;">
+            (Reach over ??? points to reset only red & blue)
+        </div><div id="teal" style="display: none;">
+            (Reach over ??? points to reset only blue & green)
+        </div>
+    </div>
+</body>
+</html>
