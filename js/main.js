@@ -1,3 +1,6 @@
+wipe()
+loadGame()
+
 var diff = 0;
 var date = Date.now();
 
