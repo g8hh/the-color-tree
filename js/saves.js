@@ -111,48 +111,46 @@ const col_upgs = {
     },
 }
 
-newPlayer = {
-    points: E(10),
-    w: {
-        points: E(0),
-        unl: true,
-        upg: [false,false,false,false],
-    },
-    r: {
-        points: E(0),
-        unl: false,
-        upg: [false,false],
-    },
-    g: {
-        points: E(0),
-        power: E(0),
-        unl: false,
-        upg: [false,false,false],
-    },
-    b: {
-        points: E(0),
-        unl: false,
-        upg: [false,false],
-    },
-    y: {
-        points: E(0),
-        unl: false,
-        upg: [],
-    },
-    m: {
-        points: E(0),
-        unl: false,
-        upg: [],
-    },
-    t: {
-        points: E(0),
-        unl: false,
-        upg: [],
-    },
-};
-
 function wipe() {
-    player = newPlayer
+    player = {
+        points: E(10),
+        w: {
+            points: E(0),
+            unl: true,
+            upg: [false,false,false,false],
+        },
+        r: {
+            points: E(0),
+            unl: false,
+            upg: [false,false],
+        },
+        g: {
+            points: E(0),
+            power: E(0),
+            unl: false,
+            upg: [false,false,false],
+        },
+        b: {
+            points: E(0),
+            unl: false,
+            upg: [false,false],
+        },
+        y: {
+            points: E(0),
+            unl: false,
+            upg: [],
+        },
+        m: {
+            points: E(0),
+            unl: false,
+            upg: [],
+        },
+        t: {
+            points: E(0),
+            unl: false,
+            upg: [],
+        },
+};
 };
 
 function notate(ex,acc=2){

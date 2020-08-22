@@ -57,9 +57,11 @@ function loop(){
 function updateDisplay() {
     upd('points', notate(player.points))
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
         upd(full_colors[i]+'s', notate(player[colors[i]].points))
         upd(colors[i]+'_reset', notate(col_gain[colors[i]](player.points)))
+        document.getElementById('reset'+i).style.backgroundColor = (col_gain[colors[i]](player.points).gte(1)) ? hex_colors[i] : '#9c6e6e'
+        document.getElementById('reset'+i).style.cursor = (col_gain[colors[i]](player.points).gte(1)) ? 'pointer' : 'not-allowed'
     }
 
     upd('eff0', notate(col_effs.r(player.r.points)))
@@ -78,6 +80,7 @@ function updateDisplay() {
             upd(colors[c]+'upg'+i, text)
             document.getElementById(colors[c]+'upg'+i).style.display = (color_upg[i].unl()) ? 'inline' : 'none'
             document.getElementById(colors[c]+'upg'+i).style.backgroundColor = (player[colors[c]].upg[i]) ? '#68a66b' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? hex_colors[c]: '#9c6e6e')
+            document.getElementById(colors[c]+'upg'+i).style.cursor = (player[colors[c]].upg[i]) ? 'default' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? 'pointer': 'not-allowed')
         }
     }
 }
