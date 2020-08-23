@@ -21,4 +21,8 @@ function calc(dt) {
     player.r.points = player.r.points.add((player.y.upg[1])?col_gain.r(player.points).mul(dt/1000):0)
     player.g.points = player.g.points.add((player.m.upg[1])?col_gain.g(player.points).mul(dt/1000):0)
     player.b.points = player.b.points.add((player.t.upg[1])?col_gain.b(player.points).mul(dt/1000):0)
+
+    for (let i = 0; i < colKeys; i++) {
+        if (keysDown[colKeys[i]]) reset(colors[i])
+    }
 }

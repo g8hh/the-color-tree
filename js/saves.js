@@ -14,6 +14,12 @@ var player, tab = 'none';
 var colors = ['w','r','g','b','y','m','t']
 var full_colors = ['white','red','green','blue','yellow','magenta','teal']
 var hex_colors = ['white','#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff']
+var keysDown = {};
+var colKeys = [87,82,71,66,89,77,84]
+
+addEventListener("keydown", function(e){
+    if (colKeys.indexOf(e.keyCode) != -1) reset(colors[colKeys.indexOf(e.keyCode)])
+}, false);
 
 const col_gain = {
     w: (x) => { return E(x).div(10).pow(0.5)
@@ -35,9 +41,9 @@ const col_gain = {
         .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
         .pow(player.b.upg[3]?col_upgs.b[3].cur():1)
         .floor() },
-    y: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
-    m: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
-    t: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
+    y: (x) => { return E(x).add(1).log10().div(10).add(1).log10().cbrt().floor() },
+    m: (x) => { return E(x).add(1).log10().div(10).add(1).log10().cbrt().floor() },
+    t: (x) => { return E(x).add(1).log10().div(10).add(1).log10().cbrt().floor() },
 }
 
 const col_effs = {
@@ -45,11 +51,11 @@ const col_effs = {
     g: (x) => { return E(x).add(player.g.upg[1]?col_upgs.g[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(1.25).sub(1) },
     gp: (x) => { return E(x).add(1).pow(E(1/3).mul(col_upgs.t[0].cur())) },
     b: (x) => { return E(x).add(player.b.upg[1]?col_upgs.b[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.tp(player.t.power).add(1))) },
-    y: (x) => { return E(x).add(1).pow(1.6).sub(1) },
-    yp: (x) => { return E(x).add(1).log10().pow(1.6).div(100) },
+    y: (x) => { return E(x).add(1).pow(1.8).sub(1) },
+    yp: (x) => { return E(x).add(1).log10().pow(1.8).div(100) },
     m: (x) => { return E(x).add(1).pow(2/3) },
-    t: (x) => { return E(x).add(1).pow(1.6).sub(1) },
-    tp: (x) => { return E(x).add(1).log10().pow(1.6).div(100) },
+    t: (x) => { return E(x).add(1).pow(1.8).sub(1) },
+    tp: (x) => { return E(x).add(1).log10().pow(1.8).div(100) },
 }
 
 const col_upgs = {
