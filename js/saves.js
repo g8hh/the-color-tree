@@ -23,16 +23,33 @@ const col_gain = {
         .mul(col_effs.b(player.b.points))
         .mul((player.b.upg[0])?col_upgs.b[0].cur():1)
         .floor() },
-    r: (x) => { return E(x).div(200).pow(0.3).floor() },
-    g: (x) => { return E(x).div(200).pow(0.3).floor() },
-    b: (x) => { return E(x).div(200).pow(0.3).floor() },
+    r: (x) => { return E(x).div(200).pow(0.3)
+        .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
+        .pow(player.r.upg[3]?col_upgs.r[3].cur():1)
+        .floor() },
+    g: (x) => { return E(x).div(200).pow(0.3)
+        .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
+        .pow(player.m.upg[5]?col_upgs.m[5].cur():1)
+        .floor() },
+    b: (x) => { return E(x).div(200).pow(0.3)
+        .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
+        .pow(player.b.upg[3]?col_upgs.b[3].cur():1)
+        .floor() },
+    y: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
+    m: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
+    t: (x) => { return E(x).add(1).log10().div(100).add(1).log10().cbrt().floor() },
 }
 
 const col_effs = {
-    r: (x) => { return E(x).add(1).pow(0.8) },
-    g: (x) => { return E(x).add(1).pow(1.25).sub(1) },
-    gp: (x) => { return E(x).add(1).pow(1/3) },
-    b: (x) => { return E(x).add(1).pow(0.75) },
+    r: (x) => { return E(x).add(player.r.upg[1]?col_upgs.r[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.yp(player.y.power).add(1))) },
+    g: (x) => { return E(x).add(player.g.upg[1]?col_upgs.g[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(1.25).sub(1) },
+    gp: (x) => { return E(x).add(1).pow(E(1/3).mul(col_upgs.t[0].cur())) },
+    b: (x) => { return E(x).add(player.b.upg[1]?col_upgs.b[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.tp(player.t.power).add(1))) },
+    y: (x) => { return E(x).add(1).pow(1.6).sub(1) },
+    yp: (x) => { return E(x).add(1).log10().pow(1.6).div(100) },
+    m: (x) => { return E(x).add(1).pow(2/3) },
+    t: (x) => { return E(x).add(1).pow(1.6).sub(1) },
+    tp: (x) => { return E(x).add(1).log10().pow(1.6).div(100) },
 }
 
 const col_upgs = {
@@ -46,20 +63,32 @@ const col_upgs = {
             desc: 'White points boosts point generation.',
             cost: E(1),
             unl: () => { return player.w.upg[0] },
-            cur: () => { return player.w.points.add(1).sqrt() },
+            cur: () => { return player.w.points.add(1).pow(player.y.upg[0]?col_upgs.y[0].cur():0.5) },
             effDis: (x) => { return notate(x)+'x' },
         },
         2: {
             desc: 'Points boosts point generation.',
             cost: E(5),
             unl: () => { return player.w.upg[1] },
-            cur: () => { return player.points.add(1).log10().pow(0.75).add(1) },
+            cur: () => { return player.points.add(1).log10().pow(0.75).add(1).pow(player.m.upg[0]?col_upgs.m[0].cur():1) },
             effDis: (x) => { return notate(x)+'x' },
         },
         3: {
             desc: 'Gain double white points.',
             cost: E(20),
             unl: () => { return player.w.upg[2] },
+        },
+        4: {
+            desc: 'Raise point generation by 1.15.',
+            cost: E(1e5),
+            unl: () => { return player.w.upg[1] },
+        },
+        5: {
+            desc: 'Points boost colors on 2nd rows.',
+            cost: E(1e10),
+            unl: () => { return player.w.upg[2] },
+            cur: () => { return player.points.add(1).log10().add(1).log10().max(1.5) },
+            effDis: (x) => { return notate(x)+'x' },
         },
     },
     r: {
@@ -71,9 +100,23 @@ const col_upgs = {
             effDis: (x) => { return notate(x)+'x' },
         },
         1: {
+            desc: 'Blue points add to the Red Effect.',
+            cost: E(10),
+            unl: () => { return player.r.upg[0] },
+            cur: () => { return ExpantaNum.pow(2.5,player.b.points.add(1).log10()) },
+            effDis: (x) => { return '+'+notate(x)+' to base' },
+        },
+        2: {
             desc: 'Keep white upgrades on reset',
             cost: E(25),
             unl: () => { return player.r.upg[0] },
+        },
+        3: {
+            desc: 'Red points boost red effects.',
+            cost: E('ee500'),
+            unl: () => { return player.r.upg[1] },
+            cur: () => { return player.r.points.add(1).log10().add(1).log10().add(1) },
+            effDis: (x) => { return '^'+notate(x) },
         },
     },
     g: {
@@ -85,14 +128,21 @@ const col_upgs = {
             effDis: (x) => { return notate(x)+'x' },
         },
         1: {
-            desc: 'Keep white upgrades on reset',
-            cost: E(25),
+            desc: 'White points add to the Green Effect.',
+            cost: E(10),
             unl: () => { return player.g.upg[0] },
+            cur: () => { return ExpantaNum.pow(1.1,player.w.points.add(1).log10()) },
+            effDis: (x) => { return '+'+notate(x)+' to base' },
         },
         2: {
+            desc: 'Keep white upgrades on reset',
+            cost: E(25),
+            unl: () => { return player.g.upg[1] },
+        },
+        3: {
             desc: 'Gain 100% white points/sec',
             cost: E(50),
-            unl: () => { return player.g.upg[1] },
+            unl: () => { return player.g.upg[2] },
         },
     },
     b: {
@@ -100,13 +150,113 @@ const col_upgs = {
             desc: 'Points boost white points.',
             cost: E(3),
             unl: () => { return player.w.unl },
-            cur: () => { return player.points.add(1).log10().sqrt().max(1.5) },
+            cur: () => { return player.points.add(1).log10().max(1.5) },
             effDis: (x) => { return notate(x)+'x' },
         },
         1: {
+            desc: 'Red points add to the Blue Effect.',
+            cost: E(10),
+            unl: () => { return player.b.upg[0] },
+            cur: () => { return ExpantaNum.pow(2.5,player.r.points.add(1).log10()) },
+            effDis: (x) => { return '+'+notate(x)+' to base' },
+        },
+        2: {
             desc: 'Keep white upgrades on reset',
             cost: E(25),
             unl: () => { return player.b.upg[0] },
+        },
+        3: {
+            desc: 'Blue points boost Blue effects.',
+            cost: E('ee500'),
+            unl: () => { return player.b.upg[1] },
+            cur: () => { return player.b.points.add(1).log10().add(1).log10().add(1) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+    },
+    y: {
+        0: {
+            desc: '2nd white upgrade is stronger based on yellow points.',
+            cost: E(2),
+            unl: () => { return player.w.unl },
+            cur: () => { return player.y.points.add(1).pow(1/4) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+        1: {
+            desc: 'Gain 100% red points/sec.',
+            cost: E(5),
+            unl: () => { return player.y.upg[0] },
+        },
+        2: {
+            desc: 'Keep white upgrades on reset.',
+            cost: E(10),
+            unl: () => { return player.y.upg[1] },
+        },
+        3: {
+            desc: 'Keep red upgrades on reset for 3rd row.',
+            cost: E(25),
+            unl: () => { return player.y.upg[1] },
+        },
+    },
+    m: {
+        0: {
+            desc: '3rd white upgrade is stronger based on magenta points.',
+            cost: E(2),
+            unl: () => { return player.w.unl },
+            cur: () => { return player.m.points.add(1).pow(1/4) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+        1: {
+            desc: 'Gain 100% green points/sec.',
+            cost: E(5),
+            unl: () => { return player.m.upg[0] },
+        },
+        2: {
+            desc: 'Keep white upgrades on reset.',
+            cost: E(10),
+            unl: () => { return player.m.upg[1] },
+        },
+        3: {
+            desc: 'Raise point generation based on magenta points.',
+            cost: E(15),
+            unl: () => { return player.m.upg[1] },
+            cur: () => { return player.m.points.add(1).pow(1/6) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+        4: {
+            desc: 'Keep green upgrades on reset for 3rd row.',
+            cost: E(25),
+            unl: () => { return player.m.upg[3] },
+        },
+        5: {
+            desc: 'Green Power boost green points.',
+            cost: E(50),
+            unl: () => { return player.m.upg[3] },
+            cur: () => { return E(10).pow(player.g.power.add(1).log10().add(1).log10().add(1).cbrt()) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+    },
+    t: {
+        0: {
+            desc: 'Green Power is stronger based on teal points.',
+            cost: E(2),
+            unl: () => { return player.w.unl },
+            cur: () => { return player.t.points.add(1).pow(1/3) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+        1: {
+            desc: 'Gain 100% blue points/sec.',
+            cost: E(5),
+            unl: () => { return player.t.upg[0] },
+        },
+        2: {
+            desc: 'Keep white upgrades on reset.',
+            cost: E(10),
+            unl: () => { return player.t.upg[1] },
+        },
+        3: {
+            desc: 'Keep blue upgrades on reset for 3rd row.',
+            cost: E(25),
+            unl: () => { return player.t.upg[1] },
         },
     },
 }
@@ -117,26 +267,27 @@ function wipe() {
         w: {
             points: E(0),
             unl: true,
-            upg: [false,false,false,false],
+            upg: [],
         },
         r: {
             points: E(0),
             unl: false,
-            upg: [false,false],
+            upg: [],
         },
         g: {
             points: E(0),
             power: E(0),
             unl: false,
-            upg: [false,false,false],
+            upg: [],
         },
         b: {
             points: E(0),
             unl: false,
-            upg: [false,false],
+            upg: [],
         },
         y: {
             points: E(0),
+            power: E(0),
             unl: false,
             upg: [],
         },
@@ -147,10 +298,11 @@ function wipe() {
         },
         t: {
             points: E(0),
+            power: E(0),
             unl: false,
             upg: [],
         },
-};
+    };
 };
 
 function notate(ex, acc=2) {
@@ -163,7 +315,7 @@ function notate(ex, acc=2) {
         return ex.floor().toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
     let m = ex.div(E(10).pow(e))
-    return (e.log10().gte(6)?'':m.toFixed(acc))+'e'+notate(e,0)
+    return (e.log10().gte(6)?'':m.toFixed(2))+'e'+notate(e,0)
 }
 
 function save(){
@@ -176,7 +328,7 @@ function load(x){
         player.points = ex(load.points)
         for (let i = 0; i < 7; i++) {
             player[colors[i]].points = ex(load[colors[i]].points)
-            if (colors[i] == 'g') player[colors[i]].power = ex(load[colors[i]].power)
+            if (colors[i] == 'g' || colors[i] == 'y' || colors[i] == 't') player[colors[i]].power = ex(load[colors[i]].power)
             player[colors[i]].unl = load[colors[i]].unl
             player[colors[i]].upg = load[colors[i]].upg
         }

@@ -38,7 +38,7 @@
             <br><br>
             Made by MrRedShark77
             <br><br>
-            |Version| - pre-alpha build 2 (WIP)
+            |Version| - alpha build 3
             <br><br>
             Fan game "The Prestige Tree" by Jacorb
         </div><div id="settings" style="display: none;">
@@ -62,6 +62,9 @@
                         <td><button class="upg" id="wupg1" onclick="buyUpg('w',1)"></button></td>
                         <td><button class="upg" id="wupg2" onclick="buyUpg('w',2)"></button></td>
                         <td><button class="upg" id="wupg3" onclick="buyUpg('w',3)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="wupg4" onclick="buyUpg('w',4)"></button></td>
+                        <td><button class="upg" id="wupg5" onclick="buyUpg('w',5)"></button></td>
                     </tr>
                 </tbody>
             </table>
@@ -77,6 +80,9 @@
                     <tr>
                         <td><button class="upg" id="rupg0" onclick="buyUpg('r',0)"></button></td>
                         <td><button class="upg" id="rupg1" onclick="buyUpg('r',1)"></button></td>
+                        <td><button class="upg" id="rupg2" onclick="buyUpg('r',2)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="rupg3" onclick="buyUpg('r',3)"></button></td>
                     </tr>
                 </tbody>
             </table>
@@ -95,6 +101,7 @@
                         <td><button class="upg" id="gupg0" onclick="buyUpg('g',0)"></button></td>
                         <td><button class="upg" id="gupg1" onclick="buyUpg('g',1)"></button></td>
                         <td><button class="upg" id="gupg2" onclick="buyUpg('g',2)"></button></td>
+                        <td><button class="upg" id="gupg3" onclick="buyUpg('g',3)"></button></td>
                     </tr>
                 </tbody>
             </table>
@@ -110,15 +117,73 @@
                     <tr>
                         <td><button class="upg" id="bupg0" onclick="buyUpg('b',0)"></button></td>
                         <td><button class="upg" id="bupg1" onclick="buyUpg('b',1)"></button></td>
+                        <td><button class="upg" id="bupg2" onclick="buyUpg('b',2)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="bupg3" onclick="buyUpg('b',3)"></button></td>
                     </tr>
                 </tbody>
             </table>
         </div><div id="yellow" style="display: none;">
-            (Reach over ??? points to reset only red & green)
+            You have <h2 class="t_yellow" id="yellows"></h2> yellow points, which are generating <span id="eff4"></span> Yellow Power/sec
+            <br><br>
+            You have <span id="power2"></span> Yellow Power, which makes Red +<span id="eff5"></span>% stronger
+            <br><br><br><br>
+            <button id="reset4" class="reset b_yellow" onclick="reset('y')">Reset for <span id="y_reset"></span> yellow points</button>
+            <br>
+            (Reach over e100 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="yupg0" onclick="buyUpg('y',0)"></button></td>
+                        <td><button class="upg" id="yupg1" onclick="buyUpg('y',1)"></button></td>
+                        <td><button class="upg" id="yupg2" onclick="buyUpg('y',2)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="yupg3" onclick="buyUpg('y',3)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div><div id="magenta" style="display: none;">
-            (Reach over ??? points to reset only red & blue)
+            You have <h2 class="t_magenta" id="magentas"></h2> magenta points, getting +<span id="eff6"></span>% bouns 2nd row Colors effects
+            <br><br><br><br>
+            <button id="reset5" class="reset b_magenta" onclick="reset('m')">Reset for <span id="m_reset"></span> magenta points</button>
+            <br>
+            (Reach over e100 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="mupg0" onclick="buyUpg('m',0)"></button></td>
+                        <td><button class="upg" id="mupg1" onclick="buyUpg('m',1)"></button></td>
+                        <td><button class="upg" id="mupg2" onclick="buyUpg('m',2)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="mupg3" onclick="buyUpg('m',3)"></button></td>
+                        <td><button class="upg" id="mupg4" onclick="buyUpg('m',4)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="mupg5" onclick="buyUpg('m',5)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div><div id="teal" style="display: none;">
-            (Reach over ??? points to reset only blue & green)
+            You have <h2 class="t_teal" id="teals"></h2> teal points, which are generating <span id="eff7"></span> Teal Power/sec
+            <br><br>
+            You have <span id="power3"></span> Teal Power, which makes Blue +<span id="eff8"></span>% stronger
+            <br><br><br><br>
+            <button id="reset6" class="reset b_teal" onclick="reset('t')">Reset for <span id="t_reset"></span> teal points</button>
+            <br>
+            (Reach over e100 points to reset)
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button class="upg" id="tupg0" onclick="buyUpg('t',0)"></button></td>
+                        <td><button class="upg" id="tupg1" onclick="buyUpg('t',1)"></button></td>
+                        <td><button class="upg" id="tupg2" onclick="buyUpg('t',2)"></button></td>
+                    </tr><tr>
+                        <td><button class="upg" id="tupg3" onclick="buyUpg('t',3)"></button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
