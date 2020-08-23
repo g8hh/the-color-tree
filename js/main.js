@@ -1,4 +1,3 @@
-wipe()
 loadGame()
 
 var diff = 0;
