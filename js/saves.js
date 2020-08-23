@@ -302,6 +302,7 @@ function wipe() {
             unl: false,
             upg: [],
         },
+        ver: '1',
     };
 };
 
@@ -325,6 +326,9 @@ function save(){
 function load(x){
     if(typeof x == "string"){
         let load = JSON.parse(atob(x));
+        if (player.ver == undefined || player.ver == '1') {
+            break
+        }
         player.points = ex(load.points)
         for (let i = 0; i < 7; i++) {
             player[colors[i]].points = ex(load[colors[i]].points)
