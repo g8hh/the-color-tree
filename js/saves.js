@@ -326,7 +326,7 @@ function save(){
 function load(x){
     if(typeof x == "string"){
         let load = JSON.parse(atob(x));
-        if (load.ver == undefined || load.ver == '1') {
+        if (load.ver == undefined || load.ver != '1') {
             break
         }
         player.points = ex(load.points)
