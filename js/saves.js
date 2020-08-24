@@ -10,6 +10,7 @@ function ex(x){
 }
 
 var player, tab = 'none';
+var see_infinity = false;
 
 var colors = ['w','r','g','b','y','m','t']
 var full_colors = ['white','red','green','blue','yellow','magenta','teal']
@@ -28,6 +29,7 @@ const col_gain = {
         .mul((player.g.upg[0])?col_upgs.g[0].cur():1)
         .mul(col_effs.b(player.b.points))
         .mul((player.b.upg[0])?col_upgs.b[0].cur():1)
+        .mul(player.i.upg[0][1]?inf_upgs[0][1].cur():1)
         .floor() },
     r: (x) => { return E(x).div(200).pow(0.3)
         .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
@@ -46,16 +48,22 @@ const col_gain = {
     t: (x) => { return E(x).add(1).log10().div(10).add(1).log10().cbrt().floor() },
 }
 
+const inf_gain = {
+    il: () => { return E(10).pow(E(2).pow(E(2).pow(player.i.points.add(10)))) },
+    ir: () => { return player.points.add(1).log10().add(1).logBase(2).add(1).logBase(2).div(player.i.points.add(10)) },
+}
+
 const col_effs = {
     r: (x) => { return E(x).add(player.r.upg[1]?col_upgs.r[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.yp(player.y.power).add(1))) },
     g: (x) => { return E(x).add(player.g.upg[1]?col_upgs.g[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(1.25).sub(1) },
-    gp: (x) => { return E(x).add(1).pow(E(1/3).mul(col_upgs.t[0].cur())) },
+    gp: (x) => { return E(x).add(1).pow(E(1/3).mul(col_upgs.t[0].cur()).mul(player.i.upg[1][0]?inf_upgs[1][0].cur():1)) },
     b: (x) => { return E(x).add(player.b.upg[1]?col_upgs.b[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.tp(player.t.power).add(1))) },
-    y: (x) => { return E(x).add(1).pow(1.8).sub(1) },
-    yp: (x) => { return E(x).add(1).log10().pow(1.8).div(100) },
+    y: (x) => { return E(x).add(1).pow(2).sub(1) },
+    yp: (x) => { return E(x).add(1).log10().pow(2).div(100) },
     m: (x) => { return E(x).add(1).pow(2/3) },
-    t: (x) => { return E(x).add(1).pow(1.8).sub(1) },
-    tp: (x) => { return E(x).add(1).log10().pow(1.8).div(100) },
+    t: (x) => { return E(x).add(1).pow(2).sub(1) },
+    tp: (x) => { return E(x).add(1).log10().pow(2).div(100) },
+    i: (x) => { return E(2).pow(x).sub(1) }
 }
 
 const col_upgs = {
@@ -267,6 +275,49 @@ const col_upgs = {
     },
 }
 
+const inf_upgs = {
+    0: {
+        0: {
+            desc: 'Infinity points boost point generation.',
+            reqDis: 'None',
+            cost: E(40),
+            req: () => { return true },
+            unl: () => { return player.i.unl },
+            cur: () => { return player.i.points.add(1).pow(1/5) },
+            effDis: (x) => { return '^'+notate(x) },
+        },
+        1: {
+            desc: 'Infinity powers boost white points gain.',
+            reqDis: 'A1',
+            cost: E(200),
+            req: () => { return player.i.upg[0][0] },
+            unl: () => { return player.i.unl },
+            cur: () => { return player.i.power.add(1).pow(1/10) },
+            effDis: (x) => { return 'x'+notate(x) },
+        },
+    },
+    1: {
+        0: {
+            desc: 'Infinity powers boost green effects.',
+            reqDis: 'A1',
+            cost: E(200),
+            req: () => { return player.i.upg[0][0] },
+            unl: () => { return player.i.unl },
+            cur: () => { return player.i.power.add(1).log10().add(1).cbrt() },
+            effDis: (x) => { return 'x'+notate(x) },
+        },
+        1: {
+            desc: 'Green powers boost infinity powers gain.',
+            reqDis: 'B1 & A2',
+            cost: E(400),
+            req: () => { return player.i.upg[1][0] & player.i.upg[0][1] },
+            unl: () => { return player.i.unl },
+            cur: () => { return player.g.power.add(1).log10().add(1).log10().add(1).log10().max(1.5) },
+            effDis: (x) => { return 'x'+notate(x) },
+        },
+    }
+}
+
 function wipe() {
     player = {
         points: E(10),
@@ -308,7 +359,13 @@ function wipe() {
             unl: false,
             upg: [],
         },
-        ver: '1',
+        i: {
+            points: E(0),
+            power: E(0),
+            unl: false,
+            upg: [[],[],[],[],[],[],[],[],[],[]],
+        },
+        ver: '2',
     };
 };
 
@@ -332,15 +389,18 @@ function save(){
 function load(x){
     if(typeof x == "string"){
         let load = JSON.parse(atob(x));
-        if (load.ver == undefined || load.ver != '1') {
-            return
-        }
         player.points = ex(load.points)
         for (let i = 0; i < 7; i++) {
             player[colors[i]].points = ex(load[colors[i]].points)
             if (colors[i] == 'g' || colors[i] == 'y' || colors[i] == 't') player[colors[i]].power = ex(load[colors[i]].power)
             player[colors[i]].unl = load[colors[i]].unl
             player[colors[i]].upg = load[colors[i]].upg
+        }
+        if (load.i != undefined) {
+            player.i.points = ex(load.i.points)
+            player.i.power = ex(load.i.power)
+            player.i.unl = load.i.unl
+            player.i.upg = load.i.upg
         }
     } else {
         wipe();

@@ -11,6 +11,25 @@ function changeTab(id) {
     }
 }
 
+function showInfUpg(id) {
+    c = parseInt(id[0])
+    r = parseInt(id[1])
+    upd('hover_show_infupg', inf_upgs[c][r].desc+
+    (!player.i.upg[c][r]?('<br>Requires: '+inf_upgs[c][r].reqDis):'')+
+    (!player.i.upg[c][r]?('<br>Cost: '+notate(inf_upgs[c][r].cost)+' Infinity Power'):'')+
+    ((inf_upgs[c][r].cur != undefined)?('<br>Currently: '+inf_upgs[c][r].effDis(inf_upgs[c][r].cur())):''))
+}
+
+function buyInfUpg(id) {
+    c = parseInt(id[0])
+    r = parseInt(id[1])
+    cost = inf_upgs[c][r].cost
+    if (inf_upgs[c][r].req() & player.i.power.gte(cost) & !player.i.upg[c][r]) {
+        player.i.power = player.i.power.sub(cost)
+        player.i.upg[c][r] = true
+    }
+}
+
 function reset(col) {
     let reseted = false
     if (col == 'w') {
@@ -88,10 +107,19 @@ function updateDisplay() {
     upd('eff6', notate(col_effs.m(player.m.points).sub(1).mul(100)))
     upd('eff7', notate(col_effs.t(player.t.points)))
     upd('eff8', notate(col_effs.tp(player.t.power).mul(100)))
+    upd('eff9', notate(col_effs.i(player.i.points)))
+    upd('eff10', notate(inf_gain.il()))
 
     upd('power1', notate(player.g.power))
     upd('power2', notate(player.y.power))
     upd('power3', notate(player.t.power))
+    upd('power4', notate(player.i.power))
+
+    upd('reach0', notate(inf_gain.ir().mul(100)))
+
+    upd('infinites', notate(player.i.points))
+
+    document.getElementById('have_infinity').style.display = player.i.unl?'':'none'
 
     for (let c = 0; c < Object.keys(col_upgs).length; c++) {
         let color_upg = col_upgs[colors[c]]
@@ -103,6 +131,14 @@ function updateDisplay() {
             document.getElementById(colors[c]+'upg'+i).style.display = (color_upg[i].unl()) ? 'inline' : 'none'
             document.getElementById(colors[c]+'upg'+i).style.backgroundColor = (player[colors[c]].upg[i]) ? '#68a66b' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? hex_colors[c]: '#9c6e6e')
             document.getElementById(colors[c]+'upg'+i).style.cursor = (player[colors[c]].upg[i]) ? 'default' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? 'pointer': 'not-allowed')
+        }
+    }
+
+    for (let c = 0; c < Object.keys(inf_upgs).length; c++) {
+        for (let r = 0; r < Object.keys(inf_upgs[c]).length; r++) {
+            document.getElementById('inf'+c+''+r).style.display = (inf_upgs[c][r].unl()) ? 'inline' : 'none'
+            document.getElementById('inf'+c+''+r).style.backgroundColor = (player.i.upg[c][r]) ? '#68a66b' : ((player.i.power.gte(inf_upgs[c][r].cost) & inf_upgs[c][r].req()) ? 'orange': '#9c6e6e')
+            document.getElementById('inf'+c+''+r).style.cursor = (player.i.upg[c][r]) ? 'default' : ((player.i.power.gte(inf_upgs[c][r].cost) & inf_upgs[c][r].req()) ? 'pointer': 'not-allowed')
         }
     }
 }

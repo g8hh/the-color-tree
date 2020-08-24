@@ -58,6 +58,11 @@ h1, h2 {
     text-shadow: 0px 0px 7px #ff00ff;
 }
 
+.t_infinity {
+    color: orange;
+    text-shadow: 0px 0px 7px orange;
+}
+
 .color_tab {
     width: 90px;
     height: 90px;
@@ -86,6 +91,10 @@ h1, h2 {
 
 .b_magenta {
     background-color: #ff00ff;
+}
+
+.b_infinity {
+    background-color: orange;
 }
 
 .col {
@@ -120,6 +129,23 @@ h1, h2 {
 .reset {
     width: 150px;
     height: 100px;
+}
+
+.inf_upg {
+    width: 40px;
+    height: 40px;
+    font-size: auto;
+}
+
+#hover_show_infupg {
+    padding: 2px;
+    width: 75%;
+    margin: 0 auto;
+    height: 100px;
+    border: solid 3px white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 #undo {
