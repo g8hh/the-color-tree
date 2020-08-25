@@ -390,12 +390,14 @@ function load(x){
     if(typeof x == "string"){
         let load = JSON.parse(atob(x));
         player.points = ex(load.points)
-        if (player.ver == undefined) return
+        if (load.ver == undefined) return
         for (let i = 0; i < 7; i++) {
-            player[colors[i]].points = ex(load[colors[i]].points)
-            if (colors[i] == 'g' || colors[i] == 'y' || colors[i] == 't') player[colors[i]].power = ex(load[colors[i]].power)
-            player[colors[i]].unl = load[colors[i]].unl
-            player[colors[i]].upg = load[colors[i]].upg
+            if (load[colors[i]] != undefined) {
+                player[colors[i]].points = ex(load[colors[i]].points)
+                if (colors[i] == 'g' || colors[i] == 'y' || colors[i] == 't') player[colors[i]].power = ex(load[colors[i]].power)
+                player[colors[i]].unl = load[colors[i]].unl
+                player[colors[i]].upg = load[colors[i]].upg
+            }
         }
         if (load.i != undefined) {
             player.i.points = ex(load.i.points)
