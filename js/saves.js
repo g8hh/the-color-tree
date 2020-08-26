@@ -30,6 +30,7 @@ const col_gain = {
         .mul(col_effs.b(player.b.points))
         .mul((player.b.upg[0])?col_upgs.b[0].cur():1)
         .mul(player.i.upg[0][1]?inf_upgs[0][1].cur():1)
+        .pow(player.i.upg[1][2]?1.15:1)
         .floor() },
     r: (x) => { return E(x).div(200).pow(0.3)
         .mul(player.w.upg[5]?col_upgs.w[5].cur():1)
@@ -54,14 +55,14 @@ const inf_gain = {
 }
 
 const col_effs = {
-    r: (x) => { return E(x).add(player.r.upg[1]?col_upgs.r[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.yp(player.y.power).add(1))) },
-    g: (x) => { return E(x).add(player.g.upg[1]?col_upgs.g[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(1.25).sub(1) },
+    r: (x) => { return E(x).add(player.r.upg[1]?col_upgs.r[1].cur():0).mul(player.i.upg[2][0]?inf_upgs[2][0].cur():1).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.yp(player.y.power).add(1))) },
+    g: (x) => { return E(x).add(player.g.upg[1]?col_upgs.g[1].cur():0).mul(player.i.upg[2][0]?inf_upgs[2][0].cur():1).mul(col_effs.m(player.m.points)).add(1).pow(1.25).sub(1) },
     gp: (x) => { return E(x).add(1).pow(E(1/3).mul(col_upgs.t[0].cur()).mul(player.i.upg[1][0]?inf_upgs[1][0].cur():1)) },
-    b: (x) => { return E(x).add(player.b.upg[1]?col_upgs.b[1].cur():0).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.tp(player.t.power).add(1))) },
-    y: (x) => { return E(x).add(1).pow(2).sub(1) },
+    b: (x) => { return E(x).add(player.b.upg[1]?col_upgs.b[1].cur():0).mul(player.i.upg[2][0]?inf_upgs[2][0].cur():1).mul(col_effs.m(player.m.points)).add(1).pow(E(0.8).mul(col_effs.tp(player.t.power).add(1))) },
+    y: (x) => { return E(x).add(player.i.upg[2][2]?6:1).pow(2).sub(1) },
     yp: (x) => { return E(x).add(1).log10().pow(2).div(100) },
-    m: (x) => { return E(x).add(1).pow(2/3) },
-    t: (x) => { return E(x).add(1).pow(2).sub(1) },
+    m: (x) => { return E(x).add(player.i.upg[2][2]?6:1).pow(2/3) },
+    t: (x) => { return E(x).add(player.i.upg[2][2]?6:1).pow(2).sub(1) },
     tp: (x) => { return E(x).add(1).log10().pow(2).div(100) },
     i: (x) => { return E(2).pow(x).sub(1) }
 }
@@ -117,7 +118,7 @@ const col_upgs = {
             desc: 'Blue points add to the Red Effect.',
             cost: E(10),
             unl: () => { return player.r.upg[0] },
-            cur: () => { return ExpantaNum.pow(2.5,player.b.points.add(1).log10()) },
+            cur: () => { return player.i.upg[2][1]?player.b.points.pow(2):ExpantaNum.pow(2.5,player.b.points.add(1).log10()) },
             effDis: (x) => { return '+'+notate(x)+' to base' },
         },
         2: {
@@ -156,7 +157,7 @@ const col_upgs = {
         3: {
             desc: 'Gain 100% white points/sec',
             cost: E(50),
-            unl: () => { return player.g.upg[2] },
+            unl: () => { return player.g.upg[1] },
         },
     },
     b: {
@@ -171,7 +172,7 @@ const col_upgs = {
             desc: 'Red points add to the Blue Effect.',
             cost: E(10),
             unl: () => { return player.b.upg[0] },
-            cur: () => { return ExpantaNum.pow(2.5,player.r.points.add(1).log10()) },
+            cur: () => { return player.i.upg[2][1]?player.r.points.pow(2):ExpantaNum.pow(2.5,player.r.points.add(1).log10()) },
             effDis: (x) => { return '+'+notate(x)+' to base' },
         },
         2: {
@@ -295,6 +296,13 @@ const inf_upgs = {
             cur: () => { return player.i.power.add(1).pow(1/10) },
             effDis: (x) => { return 'x'+notate(x) },
         },
+        2: {
+            desc: 'Keep white upgrades on reset for pre-infinity.',
+            reqDis: 'B2',
+            cost: E(1000),
+            req: () => { return player.i.upg[1][1] },
+            unl: () => { return player.i.points.gte(2) },
+        },
     },
     1: {
         0: {
@@ -315,7 +323,39 @@ const inf_upgs = {
             cur: () => { return player.g.power.add(1).log10().add(1).log10().add(1).log10().max(1.5) },
             effDis: (x) => { return 'x'+notate(x) },
         },
-    }
+        2: {
+            desc: 'Raise white points gain by 1.15.',
+            reqDis: 'A3',
+            cost: E(2500),
+            req: () => { return player.i.upg[0][2] },
+            unl: () => { return player.i.points.gte(2) },
+        },
+    },
+    2: {
+        0: {
+            desc: 'Infinity powers boost 2nd row colors effect.',
+            reqDis: 'B2',
+            cost: E(1000),
+            req: () => { return player.i.upg[1][1] },
+            unl: () => { return player.i.points.gte(2) },
+            cur: () => { return player.i.power.add(1).log10().add(1) },
+            effDis: (x) => { return 'x'+notate(x) },
+        },
+        1: {
+            desc: '2nd Red & Blue upgrade formula is better.',
+            reqDis: 'C1',
+            cost: E(2500),
+            req: () => { return player.i.upg[2][0] },
+            unl: () => { return player.i.points.gte(2) },
+        },
+        2: {
+            desc: 'Add 5 bouns 3rd row colors effect.',
+            reqDis: 'B3 & C2',
+            cost: E(10000),
+            req: () => { return player.i.upg[1][2] & player.i.upg[2][1] },
+            unl: () => { return player.i.points.gte(2) },
+        },
+    },
 }
 
 function wipe() {

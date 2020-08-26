@@ -41,7 +41,7 @@ function reset(col) {
         }
     } else if (col == 'r' || col == 'g' || col == 'b') {
         if (col_gain[col](player.points).gte(1)) {
-            if (!player[col].upg[2]) player.w.upg = player.w.upg.map(() => {false})
+            if (!(player[col].upg[2] || player.i.upg[0][2])) player.w.upg = player.w.upg.map(() => {false})
             player[col].unl = true
             player[col].points = player[col].points.add(col_gain[col](player.points))
             player.w.points = E(0)
@@ -50,7 +50,7 @@ function reset(col) {
         }
     } else if (col == 'y' || col == 'm' || col == 't') {
         if (col_gain[col](player.points).gte(1)) {
-            if (!player[col].upg[2]) player.w.upg = []
+            if (!(player[col].upg[2] || player.i.upg[0][2])) player.w.upg = []
             for (let i = 0; i < 4; i++) {
                 player[['w', 'r', 'g', 'b'][i]].points = E(0)
                 player[['w', 'r', 'g', 'b'][i]].unl = false
