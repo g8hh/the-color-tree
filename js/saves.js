@@ -484,6 +484,7 @@ function notate(ex, acc=2) {
 }
 
 function save(){
+    if (localStorage.getItem("theColorTreeSave") == '') wipe()
     localStorage.setItem("theColorTreeSave",btoa(JSON.stringify(player)));
 }
     
