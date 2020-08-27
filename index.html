@@ -36,8 +36,8 @@
                 <button class="color_tab b_magenta" onclick="changeTab('magenta')">M</button>
                 <button class="color_tab b_teal" onclick="changeTab('teal')">T</button>
             </div><br><br><br><br><div id="have_infinity">
-                <button class="color_tab b_infinity" onclick="changeTab('infinity')">I</button><br>
-                <span id="reach0"></span>%
+                <button class="color_tab b_infinity" onclick="changeTab('infinity')">I</button>
+                <div id="reach0"></div>
             </div>
         </div><div class="col right">
             <div id="info" style="display: none;">
@@ -46,7 +46,7 @@
                 <br><br>
                 Made by MrRedShark77
                 <br><br>
-                |Version| - alpha build 5
+                |Version| - alpha build 6
                 <br><br>
                 Fan game "The Prestige Tree" by Jacorb
                 <br><br><br><br>|Hotkeys|
@@ -204,6 +204,8 @@
             </div><div id="infinity" style="display: none;">
                 You have <h2 id="infinites" class="t_infinity"></h2> infinity points, which are generating <span id='eff9'></span> Infinity Power/sec
                 <br><br>
+                <button id="inf_reset" class="reset b_infinity" style="width: 300px;" onclick="infReset()">Reset for <span id="i_reset"></span> infinity points<br>Next at <span id="i_next"></span></button>
+                <br><br>
                 Limit number is <span id="eff10"></span>
                 <br><br>
                 You have <span id="power4"></span> Infinity Power
@@ -216,16 +218,25 @@
                             <td><button onmouseover="showInfUpg('00')" onclick="buyInfUpg('00')" id="inf00" class="inf_upg b_infinity">A1</button></td>
                             <td><button onmouseover="showInfUpg('01')" onclick="buyInfUpg('01')" id="inf01" class="inf_upg b_infinity">A2</button></td>
                             <td><button onmouseover="showInfUpg('02')" onclick="buyInfUpg('02')" id="inf02" class="inf_upg b_infinity">A3</button></td>
+                            <td><button onmouseover="showInfUpg('03')" onclick="buyInfUpg('03')" id="inf03" class="inf_upg b_infinity">A4</button></td>
                         </tr>
                         <tr>
                             <td><button onmouseover="showInfUpg('10')" onclick="buyInfUpg('10')" id="inf10" class="inf_upg b_infinity">B1</button></td>
                             <td><button onmouseover="showInfUpg('11')" onclick="buyInfUpg('11')" id="inf11" class="inf_upg b_infinity">B2</button></td>
                             <td><button onmouseover="showInfUpg('12')" onclick="buyInfUpg('12')" id="inf12" class="inf_upg b_infinity">B3</button></td>
+                            <td><button onmouseover="showInfUpg('13')" onclick="buyInfUpg('13')" id="inf13" class="inf_upg b_infinity">B4</button></td>
                         </tr>
                         <tr>
                             <td><button onmouseover="showInfUpg('20')" onclick="buyInfUpg('20')" id="inf20" class="inf_upg b_infinity">C1</button></td>
                             <td><button onmouseover="showInfUpg('21')" onclick="buyInfUpg('21')" id="inf21" class="inf_upg b_infinity">C2</button></td>
                             <td><button onmouseover="showInfUpg('22')" onclick="buyInfUpg('22')" id="inf22" class="inf_upg b_infinity">C3</button></td>
+                            <td><button onmouseover="showInfUpg('23')" onclick="buyInfUpg('23')" id="inf23" class="inf_upg b_infinity">C4</button></td>
+                        </tr>
+                        <tr>
+                            <td><button onmouseover="showInfUpg('30')" onclick="buyInfUpg('30')" id="inf30" class="inf_upg b_infinity">D1</button></td>
+                            <td><button onmouseover="showInfUpg('31')" onclick="buyInfUpg('31')" id="inf31" class="inf_upg b_infinity">D2</button></td>
+                            <td><button onmouseover="showInfUpg('32')" onclick="buyInfUpg('32')" id="inf32" class="inf_upg b_infinity">D3</button></td>
+                            <td><button onmouseover="showInfUpg('33')" onclick="buyInfUpg('33')" id="inf33" class="inf_upg b_infinity">D4</button></td>
                         </tr>
                     </tbody>
                 </table>

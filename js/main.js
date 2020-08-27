@@ -72,6 +72,20 @@ function reset(col) {
     }
 }
 
+function infReset() {
+    if (player.points.gte(inf_gain.il())) {
+        player.i.points = player.i.points.add(inf_gain.bulk())
+        player.points = E(10)
+        for (let i = 0; i < 7; i++) {
+            player[colors[i]].points = E(0)
+            if (colors[i] == 'g' || colors[i] == 'y' || colors[i] == 't') player[colors[i]].power = E(0)
+            player[colors[i]].unl = false
+            player[colors[i]].upg = []
+        }
+        player.w.unl = true
+    }
+}
+
 function buyUpg(col, id) {
     let ic = colors.indexOf(col)
     let color_upg = col_upgs[col][id]
@@ -115,7 +129,8 @@ function updateDisplay() {
     upd('power3', notate(player.t.power))
     upd('power4', notate(player.i.power))
 
-    upd('reach0', notate(inf_gain.ir().mul(100)))
+    document.getElementById('reach0').style.display = player.i.points.gte(10)?'none':''
+    upd('reach0', notate(inf_gain.ir().mul(100))+'%')
 
     upd('infinites', notate(player.i.points))
 
@@ -128,7 +143,7 @@ function updateDisplay() {
             ('<br>Cost: '+notate(color_upg[i].cost)+' '+full_colors[c]+' points') +
             ((color_upg[i].cur != undefined)?('<br>Currently: '+color_upg[i].effDis(color_upg[i].cur())):'')
             upd(colors[c]+'upg'+i, text)
-            document.getElementById(colors[c]+'upg'+i).style.display = (color_upg[i].unl()) ? 'inline' : 'none'
+            document.getElementById(colors[c]+'upg'+i).style.display = (color_upg[i].unl()) ? '' : 'none'
             document.getElementById(colors[c]+'upg'+i).style.backgroundColor = (player[colors[c]].upg[i]) ? '#68a66b' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? hex_colors[c]: '#9c6e6e')
             document.getElementById(colors[c]+'upg'+i).style.cursor = (player[colors[c]].upg[i]) ? 'default' : ((player[colors[c]].points.gte(color_upg[i].cost)) ? 'pointer': 'not-allowed')
         }
@@ -136,11 +151,18 @@ function updateDisplay() {
 
     for (let c = 0; c < Object.keys(inf_upgs).length; c++) {
         for (let r = 0; r < Object.keys(inf_upgs[c]).length; r++) {
-            document.getElementById('inf'+c+''+r).style.display = (inf_upgs[c][r].unl()) ? 'inline' : 'none'
+            document.getElementById('inf'+c+''+r).style.display = (inf_upgs[c][r].unl()) ? '' : 'none'
             document.getElementById('inf'+c+''+r).style.backgroundColor = (player.i.upg[c][r]) ? '#68a66b' : ((player.i.power.gte(inf_upgs[c][r].cost) & inf_upgs[c][r].req()) ? 'orange': '#9c6e6e')
             document.getElementById('inf'+c+''+r).style.cursor = (player.i.upg[c][r]) ? 'default' : ((player.i.power.gte(inf_upgs[c][r].cost) & inf_upgs[c][r].req()) ? 'pointer': 'not-allowed')
         }
     }
+
+    document.getElementById('inf_reset').style.display = player.i.points.gte(10)?'':'none'
+    document.getElementById('inf_reset').style.backgroundColor = player.points.gte(inf_gain.il()) ? 'orange' : '#9c6e6e'
+    document.getElementById('inf_reset').style.cursor = player.points.gte(inf_gain.il()) ? 'pointer' : 'not-allowed'
+
+    upd('i_reset', inf_gain.bulk().gte(1)?notate(inf_gain.bulk()):notate(0))
+    upd('i_next', notate(inf_gain.next()))
 }
 
 setInterval(loop, 50);

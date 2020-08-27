@@ -8,6 +8,7 @@ function calc(dt) {
         .pow(player.w.upg[4]?1.15:1)
         .pow(player.m.upg[3]?col_upgs.m[3].cur():1)
         .pow(player.i.upg[0][0]?inf_upgs[0][0].cur():1)
+        .pow(player.i.upg[2][3]?inf_upgs[2][3].cur():1)
     .mul(dt/1000))
     player.g.power = player.g.power.add(
         col_effs.g(player.g.points)
@@ -27,7 +28,7 @@ function calc(dt) {
     player.g.points = player.g.points.add((player.m.upg[1])?col_gain.g(player.points).mul(dt/1000):0)
     player.b.points = player.b.points.add((player.t.upg[1])?col_gain.b(player.points).mul(dt/1000):0)
 
-    if (!see_infinity & player.points.gte(inf_gain.il())) {
+    if (!see_infinity & player.points.gte(inf_gain.il()) & player.i.points.lt(10)) {
         see_infinity = true
         seeInfinity()
     }
