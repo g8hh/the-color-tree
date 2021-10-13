@@ -88,6 +88,7 @@ var cnItems = {
     "Gain 100% green points/sec.": "获得 100% 绿色点/秒。",
     "Gain 100% red points/sec.": "获得 100% 红色点/秒。",
     "Gain 100% white points/sec.": "获得 100% 白色点/秒。",
+    "Gain 100% white points/sec": "获得 100% 白色点/秒",
     "Gain double white points.": "获得双倍白色点",
     "Green points boost white points.": "绿色点提升白色点。",
     "green points, which are generating": "绿色点，生成",
@@ -99,6 +100,7 @@ var cnItems = {
     "Keep green upgrades on reset for 3rd row.": "重置时保留绿色升级第三行。",
     "Keep red upgrades on reset for 3rd row.": "重置时保留红色升级第三行。",
     "Keep blue upgrades on reset for 3rd row.": "重置时保留蓝色升级第三行。",
+    "Keep white upgrades on reset": "重置时保留白色升级",
     "Keep white upgrades on reset.": "重置时保留白色升级。",
     "Points boosts point generation.": "点数促进点数生成。",
     "Raise point generation based on magenta points.": "基于品红色点提升点数生成。",
@@ -297,6 +299,7 @@ var cnExcludeWhole = [
     /^([\d\.]+)$/,
     /^([\d\.,]+)$/,
     /^([\d\.]+)e([\d\.,]+)$/,
+    /^e([\d\.]+)e([\d\.,]+)$/,
     /^[\u4E00-\u9FA5]+$/
 ];
 var cnExcludePostfix = [
@@ -311,8 +314,11 @@ var cnExcludePostfix = [
 var cnRegReplace = new Map([
     [/^You have (.+) points$/, '你有 $1 点数'],
     [/^Currently: \^([\d\.]+)$/, '当前: \^$1'],
-    [/^Currently: \+([\d\.]+) to base$/, '当前: \+$1 到基础'],
+    [/^Currently: (.+) to base$/, '当前: \+$1 到基础'],
     [/^Currently: ([\d\.]+)x$/, '当前: $1x'],
+    [/^Currently: ([\d\.,]+)x$/, '当前: $1x'],
+    [/^Currently: ([\d\.]+)e([\d\.,]+)x$/, '当前: $1e$2x'],
+    [/^Currently: e([\d\.]+)e([\d\.,]+)x$/, '当前: e$1e$2x'],
     [/^\(Reach over (.+) points to reset\)$/, '\(达到 $1 点数以重置\)'],
     [/^Reach over (.+) points to reset$/, '达到 $1 点数以重置'],
     [/^Cost: (.+) magenta points$/, '成本: $1 品红色点'],
